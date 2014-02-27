@@ -3,7 +3,7 @@
 Plugin Name: Reset Slugs
 Plugin URI: 
 Description: Because sometimes you just want to revert your slugs to what WordPress thinks is best.
-Version: 1.0
+Version: 1.1
 Author: Timothy Wood @codearachnid
 Author URI: http://www.codearachnid.com
 Text Domain: wprs
