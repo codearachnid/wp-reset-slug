@@ -31,7 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 if ( !defined( 'ABSPATH' ) )
 	die( '-1' );
 
-add_action('admin_menu', 'wprs_add_menu');
+
+
+/**
+ * add the menue options into admin settings
+ * @return void
+ */
 function wprs_add_menu(){
 	add_options_page( 
 		'Reset Slugs', 
@@ -41,8 +46,14 @@ function wprs_add_menu(){
 		'wprs_option_page'
 		);
 }
+add_action('admin_menu', 'wprs_add_menu');
 
-add_action( 'admin_init', 'wprs_register_setting' );
+/**
+ * register plugin settings and call wprs_sanitize_slugs when required by save process
+ *
+ * @uses   wprs_sanitize_slugs
+ * @return void
+ */
 function wprs_register_setting() {
 
 	if ( !empty( $_REQUEST['settings-updated'] ) && $_REQUEST['settings-updated'] == true ) {
@@ -89,7 +100,12 @@ function wprs_register_setting() {
 		'wprs_instructions' 
 		);
 } 
+add_action( 'admin_init', 'wprs_register_setting' );
 
+/**
+ * settings field for listing post types
+ * @return void
+ */
 function wprs_field_post_types(){
 	$options = get_option('wprs_options');
 	$post_types = !empty( $options['post_types'] ) ? (array) $options['post_types'] : array();
@@ -104,14 +120,29 @@ function wprs_field_post_types(){
 	echo '</ul>';
 }
 
-function wprs_validate_options($input) {
+/**
+ * parse validation options for the submitted fields, reconfigure how checkbox
+ * values are passed and saved to database
+ * @param  array $input
+ * @return array
+ */
+function wprs_validate_options( $input ) {
 	$input['post_types'] = array_keys( $input['post_types'] );
 	return $input;
 }
 
+/**
+ * instruction text to explain changes before saving
+ * @return void
+ */
 function wprs_instruct_section_text(){
 	?><p><?php _e( 'Please understand that you will not be able to recover changes after proceeding. This can potentially adversely affect your SEO, site functionality and performance. You assume all risk and reward to your site based on the actions of this plugin.', 'wprs' ); ?></p><?php
 }
+
+/**
+ * force user to agree to terms before running wprs_sanitize_slugs
+ * @return void
+ */
 function wprs_field_agree_before_run(){
 	?>
 	<label>
@@ -130,6 +161,10 @@ function wprs_field_agree_before_run(){
 	<?php
 }
 
+/**
+ * settings page structure
+ * @return void
+ */
 function wprs_option_page(){
 	?><div class="wrap">
 		<h2><?php _e( 'Reset Slugs', 'wprs' ); ?></h2>
