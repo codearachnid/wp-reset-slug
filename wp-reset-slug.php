@@ -33,7 +33,13 @@ if ( !defined( 'ABSPATH' ) )
 
 add_action('admin_menu', 'wprs_add_menu');
 function wprs_add_menu(){
-	add_options_page( 'Reset Slugs', 'Reset Slugs', 'manage_options', 'wprs_options', 'wprs_option_page');
+	add_options_page( 
+		'Reset Slugs', 
+		'Reset Slugs', 
+		'manage_options', 
+		'wprs_options', 
+		'wprs_option_page'
+		);
 }
 
 add_action( 'admin_init', 'wprs_register_setting' );
@@ -49,13 +55,39 @@ function wprs_register_setting() {
 		}
 	}
 
-	register_setting( 'wprs_options', 'wprs_options', 'wprs_validate_options' );
+	register_setting( 
+		'wprs_options', 
+		'wprs_options', 
+		'wprs_validate_options' 
+		);
 
-	add_settings_section('wprs_main', 'Configure:', null, 'wprs_options');
-	add_settings_field('Select Post Types', 'Select Post Types', 'wprs_field_post_types', 'wprs_options', 'wprs_main' );
+	add_settings_section( 
+		'wprs_main', 
+		__('Configure:', 'wprs' ), 
+		null, 
+		'wprs_options' 
+		);
+	add_settings_field( 
+		__( 'Select Post Types', 'wprs' ), 
+		__( 'Select Post Types', 'wprs' ), 
+		'wprs_field_post_types', 
+		'wprs_options', 
+		'wprs_main' 
+		);
 	
-	add_settings_section('wprs_instructions', 'WARNING:', 'wprs_instruct_section_text', 'wprs_options');
-	add_settings_field('wprs_agree_before_run', '', 'wprs_field_agree_before_run', 'wprs_options', 'wprs_instructions' );
+	add_settings_section( 
+		'wprs_instructions', 
+		__( 'WARNING:', 'wprs' ), 
+		'wprs_instruct_section_text', 
+		'wprs_options' 
+		);
+	add_settings_field( 
+		'wprs_agree_before_run', 
+		'', 
+		'wprs_field_agree_before_run', 
+		'wprs_options', 
+		'wprs_instructions' 
+		);
 } 
 
 function wprs_field_post_types(){
