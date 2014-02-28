@@ -62,7 +62,11 @@ function wprs_register_setting() {
 		if( wprs_sanitize_slugs( $post_types ) ){
 			add_settings_error('general', 'slug_reset', __('Slugs reset.'), 'updated');
 		} else {
-			add_settings_error('general', 'slug_reset_error', __('There is an issue resetting the slugs.'), 'error');
+			if( ! empty( $post_types ) ) {
+				add_settings_error('general', 'slug_reset_error', __('There is an issue resetting the slugs.'), 'error');
+			} else {
+				add_settings_error('general', 'slug_reset_error', __('You have not selected any post types to reset.'), 'error');
+			}
 		}
 	}
 
@@ -113,7 +117,7 @@ function wprs_field_post_types(){
 	foreach( get_post_types() as $post_type ) {
 		?><li>
 				<label>
-				<input id='wprs_reset_post_types' name='wprs_options[post_types][<?php echo $post_type; ?>]' type='checkbox' value='1' <?php checked( in_array( $post_type, $post_types ) ); ?> />
+				<input id='wprs_reset_post_types' name='wprs_options[post_types][<?php echo $post_type; ?>]' type='checkbox' value='<?php echo $post_type; ?>' <?php checked( in_array( $post_type, $post_types ) ); ?> />
 				<?php echo ucwords( strtolower( str_replace( '-', ' ', str_replace( '_', ' ', $post_type ) ) ) ); ?></label>
 		</li><?php
 	}
@@ -127,7 +131,7 @@ function wprs_field_post_types(){
  * @return array
  */
 function wprs_validate_options( $input ) {
-	$input['post_types'] = array_keys( $input['post_types'] );
+	$input['post_types'] = !empty( $input['post_types'] ) ? array_keys( $input['post_types'] ) : array();
 	return $input;
 }
 
